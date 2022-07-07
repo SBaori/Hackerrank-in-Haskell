@@ -9,6 +9,12 @@ snd' (_,a,_) = a
 trd' :: (a,a,a) -> a
 trd' (_,_,a) = a
 
+cols :: Int
+cols = 63
+
+row :: Int
+row = 32
+
 -- Generates triangle row-wise
 generateTriaPos :: [(Int,Int,Int)] -> [(Int,Int,Int)]
 generateTriaPos (p:ps)
@@ -43,10 +49,10 @@ solve r s e n = (solve r s e' (n-1)) -- bottom left tri
 
 main = interact $ unlines 
                 . reverse 
-                . map (generateRow 62 '_' . reverse . expandTup) 
+                . map (generateRow (cols - 1) '_' . reverse . expandTup) 
                 . groupBy (\x y -> (fst' x) == (fst' y)) 
                 . sortBy (\x y -> compare (fst' x) (fst' y)) 
                 . generateTriaPos 
-                . solve 0 0 62 
+                . solve 0 0 (cols - 1) 
                 . read . head . words
 
