@@ -9,6 +9,11 @@ snd' (_,a,_) = a
 trd' :: (a,a,a) -> a
 trd' (_,_,a) = a
 
+cols :: Int
+cols = 100
+
+row :: Int
+row = 63
 
 -- Expands tuples 
 expandTup :: [(Int,Int,Int)] -> [[Int]]
@@ -20,7 +25,7 @@ expandTup (p:ps) = [[r+x,c] | x <- [1..(div h 2)]] ++ [[r + (div h 2) + x,c-x,c+
         h = trd' p
 
 fillGaps :: Int -> [[Char]] -> [[Char]]
-fillGaps r p = p ++ [(generateRow 99 '_' []) | x <- [1..(r - length p)]]
+fillGaps r p = p ++ [(generateRow (cols - 1) '_' []) | x <- [1..(r - length p)]]
 
 generateRow :: Int -> Char -> [Int] -> [Char]
 generateRow n bg pos
@@ -38,12 +43,12 @@ group' :: [[Int]] -> [Int]
 group' = foldl (\x y -> x ++ tail y) []
 
 main = interact $ unlines 
-				. reverse
-				. fillGaps 63 
-				. map (generateRow 99 '_' . reverse . group') 
-				. groupBy (\x y -> (head x) == (head y)) 
-				. sort 
-				. expandTup 
-				. solve 0 49 32 
-				. read . head . words 
+		. reverse
+		. fillGaps row
+		. map (reverse . generateRow (cols - 1) '_' . reverse . group') 
+		. groupBy (\x y -> (head x) == (head y)) 
+		. sort 
+		. expandTup 
+		. solve 0 ((div cols 2) - 1) 32 
+		. read . head . words 
 
