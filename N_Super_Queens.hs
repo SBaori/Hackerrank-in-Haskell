@@ -1,4 +1,4 @@
-import Control.Monad
+import Control.Monad (liftM2,guard)
 import Data.Maybe (fromMaybe)
 import Control.Applicative ( Alternative((<|>)) ) 
 
