@@ -1,13 +1,13 @@
 -- Tail recursion!
-f :: Int -> Int -> Int -> Int
-f i n prev
+helper :: Int -> Int -> Int -> Int
+helper i n prev
   | i == (n + 1) = prev
-  | otherwise = f (i + 1) n (prev + 5 * (i - 1) - (2 * (i - 1) - 1))
+  | otherwise = helper (i + 1) n (prev + 5 * (i - 1) - (2 * (i - 1) - 1))
 
-helper :: Int -> Int
-helper 1 = 1
-helper 2 = 5
-helper n = f 3 n 5
+solve :: Int -> Int
+solve 1 = 1
+solve 2 = 5
+solve n = helper 3 n 5
 
 main = do
     n <- getLine
@@ -16,5 +16,5 @@ main = do
         go 0 = return ()
         go n = do
             s <- getLine
-            putStrLn $ show $ (helper) $ read s
+            putStrLn $ show $ solve $ read s
             go (n-1) 
