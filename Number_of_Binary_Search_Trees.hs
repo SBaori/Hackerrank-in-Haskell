@@ -2,7 +2,7 @@ num :: Int
 num = 100000007
 
 modsum :: [Int] -> Int
-modsum = foldr (\x y -> mod (mod x num + mod y num) num) 0
+modsum = foldr (\x y -> mod (x + y) num) 0
 
 -- Memoized list! Take a look at the memoized fibonacci problem to get a better understanding.
 solve :: Int -> Int
