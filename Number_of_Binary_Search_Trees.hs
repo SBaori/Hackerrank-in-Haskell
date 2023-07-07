@@ -20,5 +20,5 @@ main = do
         go 0 = return ()
         go n = do
             s <- getLine
-            print $ func $ read s
+            print $ solve $ read s
             go (n-1)
