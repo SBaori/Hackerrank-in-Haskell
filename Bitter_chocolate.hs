@@ -1,11 +1,11 @@
 import qualified Data.Map as M 
 import Data.Maybe (fromJust)
 
--- slice the bar at a coordinate/piece
+-- generate all possible configuration for a bar
 getBarStates :: [Int] -> [(Int,Int,Int)]
 getBarStates [r1,r2,r3] = filter (\(x,y,z) -> not $ y==0 && z>0) [(s1,s2,s3) | s1 <- [1..r1], s2 <- [0..r2], s3 <- [0..r3]]
 
--- generate all possible configuration for a bar
+-- slice the bar at a coordinate/piece
 updateBar :: (Int,Int,Int) -> (Int,Int) -> (Int,Int,Int)
 updateBar (r1,r2,r3) (r,c) = updatedBar
     where
