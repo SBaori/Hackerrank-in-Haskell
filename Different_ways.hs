@@ -1,7 +1,7 @@
 import Data.Array
 
-getRes :: Array Int (Array Int Int)
-getRes = listArray (0,1000) . map rowToArray $ combinations 
+getRes :: Array (Int,Int) Int
+getRes = listArray ((0,0),(1000,1000)) . concat $ combinations 
     where
         rowToArray l = listArray (0, length l - 1) l
 
@@ -21,5 +21,6 @@ main = do
         go n = do
             s <- getLine
             let [nn,k] = map read $ words s
-            print $ getRes ! nn ! k
+            print $ getRes ! (nn,k)
             go (n-1)
+
