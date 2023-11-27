@@ -2,8 +2,6 @@ import Data.Array
 
 getRes :: Array (Int,Int) Int
 getRes = listArray ((0,0),(1000,1000)) . concat $ combinations 
-    where
-        rowToArray l = listArray (0, length l - 1) l
 
 -- bottom up dp with the concept nCk = (n-1)Ck + (n-1)C(k-1)
 combinations :: [[Int]]
