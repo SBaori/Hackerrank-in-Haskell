@@ -6,7 +6,7 @@ import Data.List (tails, foldl', concatMap)
 getPassSplit loginStr pass = V.last dp
     where
         loginStrDp = V.fromList $ zip (reverse $ tails loginStr) [0..]
-        charMap = foldl' (\cm str@(c:cs) -> M.insertWith (++) c [(str, length str)] cm) M.empty pass
+        charMap = foldl' (\cm p@(c:cs) -> M.insertWith (++) c [(p, length p)] cm) M.empty pass
 
         dp = V.generate (length loginStr + 1) genVal
 
