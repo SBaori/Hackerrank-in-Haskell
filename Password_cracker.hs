@@ -1,7 +1,7 @@
 import qualified Data.Map as M
 import qualified Data.Vector as V
 import Data.Maybe (fromMaybe)
-import Data.List (tails, foldl', concatMap)
+import Data.List (tails, concatMap)
 
 getPassSplit loginStr pass = V.last dp
     where
