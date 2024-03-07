@@ -12,9 +12,12 @@ solve (s,n) = foldl (\r partS ->
                                     lenr = length r
                                     check = mod n (head partS) == 0
                                 in 
-                                    if not check then 
+                                    if not check || null f || (not (null r) && lenr < lenf) then 
                                         r 
-                                    else if not (null f) && (lenr > lenf || null r) then f else if lenr == lenf then min r f else r
+                                    else if null r || lenr > lenf then
+                                        f
+                                    else
+                                        min r f
                     ) [] $ init $ tails rs
     where
         rs = sortBy (flip compare) s
