@@ -3,6 +3,7 @@ import qualified Data.Vector as V
 import Data.Maybe (fromMaybe)
 import Data.List (tails, foldl', concatMap)
 
+getPassSplit :: String -> [String] -> [String]
 getPassSplit loginStr pass = V.last dp
     where
         loginStrDp = V.fromList $ zip (reverse $ tails loginStr) [0..]
