@@ -9,6 +9,7 @@ getPassSplit loginStr pass = V.last dp
         loginStrDp = V.fromList $ zip (reverse $ tails loginStr) [0..]
         charMap = foldl' (\cm p@(c:cs) -> M.insertWith (++) c [(p, length p)] cm) M.empty pass
 
+        dp :: V.Vector [String]
         dp = V.generate (length loginStr + 1) genVal
 
         genVal 0 = [""]
