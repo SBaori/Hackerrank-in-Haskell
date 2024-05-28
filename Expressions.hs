@@ -1,5 +1,4 @@
 import qualified Data.Map as M
-import Data.Char (intToDigit)
 
 -- DFS with caching (Top down dynamic programming)
 -- cacheA = cache after addition branch
