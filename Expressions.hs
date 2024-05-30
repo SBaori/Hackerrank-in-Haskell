@@ -8,9 +8,9 @@ findValidExprPath :: Int -> Int -> [Int] -> Int -> M.Map (Int, Int) Bool -> M.Ma
 findValidExprPath i val list n cache
     | i == n-1 = M.fromList [((i,val), mod val 101 == 0)]
     | val < 0 || M.member (i,val) cache = cache
-    | M.member (i+1, val + list !! (i+1)) cacheA && cacheA M.! (i+1, val + list !! (i+1)) = M.insert (i,val) True cacheA
-    | M.member (i+1, val - list !! (i+1)) cacheAS && cacheAS M.! (i+1, val - list !! (i+1)) = M.insert (i,val) True cacheAS
-    | M.member (i+1, val * list !! (i+1)) cacheASM && cacheASM M.! (i+1, val * list !! (i+1)) = M.insert (i,val) True cacheASM
+    | fromMaybe False $ M.lookup (i+1, val + list !! (i+1)) cacheA = M.insert (i,val) True cacheA
+    | fromMaybe False $ M.lookup (i+1, val - list !! (i+1)) cacheAS = M.insert (i,val) True cacheAS
+    | fromMaybe False $ M.lookup (i+1, val * list !! (i+1)) cacheASM = M.insert (i,val) True cacheASM
     | otherwise = M.insert (i,val) False $ M.union (M.union cacheA cacheAS) cacheASM
     where
         cacheA = findValidExprPath (i+1) (val + list !! (i+1)) list n cache
