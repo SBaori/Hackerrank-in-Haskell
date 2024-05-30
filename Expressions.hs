@@ -6,8 +6,8 @@ import qualified Data.Map as M
 -- cahceASM = cache after addition followed by subtraction followed by mulitplication branch
 findValidExprPath :: Int -> Int -> [Int] -> Int -> M.Map (Int, Int) Bool -> M.Map (Int, Int) Bool
 findValidExprPath i val list n cache
-    | i == n-1 = M.fromList [((i,val), mod val 101 == 0)]
-    | val < 0 || M.member (i,val) cache = cache
+    | i == n-1 = M.singleton (i,val) (mod val 101 == 0)
+    | M.member (i,val) cache = cache
     | fromMaybe False $ M.lookup (i+1, val + list !! (i+1)) cacheA = M.insert (i,val) True cacheA
     | fromMaybe False $ M.lookup (i+1, val - list !! (i+1)) cacheAS = M.insert (i,val) True cacheAS
     | fromMaybe False $ M.lookup (i+1, val * list !! (i+1)) cacheASM = M.insert (i,val) True cacheASM
