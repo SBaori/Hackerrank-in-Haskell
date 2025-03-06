@@ -4,10 +4,9 @@ dp = initTable : (nextTable <$> dp)
     initTable = ((1,0) : repeat (1,0)) : repeat ((0,1) : repeat (0,0))
 
     nextTable :: [[(Int,Int)]] -> [[(Int,Int)]]
-    nextTable prevTable = let t = initRow : zipWith nextRow rs t in t
+    nextTable prevTable = let t = initRow : zipWith nextRow (zip prevTable (tail prevTable)) t in t
       where
         initRow = (0,0) : repeat (1,0)
-        rs = zip prevTable (tail prevTable)
 
     nextRow :: ([(Int,Int)], [(Int,Int)]) -> [(Int,Int)] -> [(Int,Int)]
     nextRow (prevTablePrevRow, prevTableCurrRow) currTablePrevRow = let r = initCell : zipWith3 nextCell (zip (tail prevTablePrevRow) prevTableCurrRow) (tail currTablePrevRow) r in r
