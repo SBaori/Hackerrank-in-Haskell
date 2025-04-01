@@ -20,12 +20,6 @@ getTopLeft shape = (x,y)
         x = fst $ minimumBy (\(x1, _) (x2, _) -> compare x1 x2) shape
         y = snd $ minimumBy (\(_, y1) (_, y2) -> compare y1 y2) shape
 
-parseInp :: [String] -> ((Int,Int), (String, (Int,Int)), [[String]])
-parseInp inp = ((r,c), target, board)
-    where
-        ([r,c], rest) = (\([f],s) -> (map read $ words f, s)) $ splitAt 1 inp
-        (board, rest') = (\(f,s) -> (map words f, s)) $ splitAt r rest
-        target = (\[f,s] -> (f, (\[x,y] -> (x,y)) $ map read $ words s)) rest'
 
 -- @info: MoveShapeAround
 getShapeMoves :: [(Shape, Grid)] 
@@ -54,14 +48,14 @@ getShapeMoves ((shape, occ):qs) (r,c) isTargetLabel remGrid seenGrids acc = getS
                 isValid = all (\(x,y) -> x >= 0 && x < r && y >= 0 && y < c && S.notMember (x,y) occupied) shape'
                 seenGrids' = S.union seenGrids $ S.singleton grid
 
--- @info: bfs till targetShape reaches target (assuming a path always exists)
+-- @info: bfs till targetShape reaches target (assuming a solution always exists)
 getTargetShapePath :: [(M.Map String Shape, Grid, [(String, (Int,Int), (Int,Int))])]
                       -> (Int,Int)
                       -> (String, (Int,Int))
                       -> [String]
                       -> S.Set (Grid)
                       -> [(String, (Int,Int), (Int,Int))]
-getTargetShapePath ((shapeMap, grid, moves):qs) (r,c) target@(tLabel, (tx,ty)) labels seenGrids
+getTargetShapePath q@((shapeMap, grid, moves):qs) (r,c) target@(tLabel, (tx,ty)) labels seenGrids
     | not . null $ targetLocs = reverse $ (\(_, _, moves) -> moves) $ head targetLocs
     | otherwise = getTargetShapePath (qs ++ q') (r,c) target labels seenGrids'
     where
@@ -86,23 +80,33 @@ getTargetShapePath ((shapeMap, grid, moves):qs) (r,c) target@(tLabel, (tx,ty)) l
                 seenGrids' = S.union seenGrids $ S.fromList $ map (\(_,grid,_) -> grid) nextShapeMoves
 
         (seenGrids', q') = helper labels seenGrids []
-
-        -- @info: Check and retrieve any moves where targetShape has reached Target
+        
         targetLocs = filter ((\sm -> getTopLeft (sm M.! tLabel) == (tx, ty)) . (\(f,_,_) -> f)) q'
 
-getOutput :: [(String, (Int,Int), (Int,Int))] -> String
-getOutput moves = show (length moves) ++ "\n" ++ (unlines movesString)
-  where
-    movesString = map (\(label, start, end) -> label ++ " " ++ show start ++ " " ++ show end) moves
 
-solve :: ((Int,Int), (String, (Int,Int)), [[String]]) -> [(String, (Int,Int), (Int,Int))]
-solve ((r,c), target@(tLabel, (tx,ty)), board)
-    | initCheck = []
-    | otherwise = getTargetShapePath [(shapeMap, grid, [])] (r,c) target (M.keys shapeMap) S.empty
+
+solve :: [String] -> String
+solve inp = getOutput moves
   where
+    ((r,c), target@(tLabel, (tx,ty)), board) = parseInp inp
     shapeMap = getShapeMap board
     grid = S.fromList $ map (\(l, loc) -> (l == tLabel, loc)) $ M.toList shapeMap
     initCheck = (getTopLeft (shapeMap M.! tLabel)) == (tx, ty)
+    
+    moves = if initCheck then [] else getTargetShapePath [(shapeMap, grid, [])] (r,c) target (M.keys shapeMap) S.empty
+
+    getOutput :: [(String, (Int,Int), (Int,Int))] -> String
+    getOutput moves = show (length moves) ++ "\n" ++ (unlines movesString)
+      where
+        movesString = map (\(label, start, end) -> label ++ " " ++ show start ++ " " ++ show end) moves
+    
+    parseInp :: [String] -> ((Int,Int), (String, (Int,Int)), [[String]])
+    parseInp inp = ((r,c), target, board)
+      where
+          ([r,c], rest) = (\([f],s) -> (map read $ words f, s)) $ splitAt 1 inp
+          (board, rest') = (\(f,s) -> (map words f, s)) $ splitAt r rest
+          target = (\[f,s] -> (f, (\[x,y] -> (x,y)) $ map read $ words s)) rest'
+
 
 main :: IO ()
-main = interact $ getOutput . solve . parseInp . lines
+main = interact $ solve . lines
