@@ -53,6 +53,7 @@ getPlacements places placeHolders = M.fromList placement
           | length ph /= length pl = False
           | otherwise = and $ map (\(phe,ple) -> (M.findWithDefault phe ple occupied) == phe) $ zip ph pl
 
+constructBoard :: M.Map (Int,Int) Char -> (Int,Int) -> [String]
 constructBoard placementMap (r,c) = [[M.findWithDefault '+' (x,y) placementMap | y <- [0..c-1]] | x <- [0..r-1]]
 
 parseInp :: [String] -> ([String], [String])
