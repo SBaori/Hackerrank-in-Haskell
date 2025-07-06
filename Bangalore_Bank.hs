@@ -16,7 +16,7 @@ solve (n1:ns) = snd $ minimumBy (\(_, d1) (_, d2) -> compare d1 d2) $ last table
             nextCell num pc = M.toList 
                               $ M.fromListWith min 
                               $ concat 
-                              $ map (\((n1, n2), d) -> ((num, n2), 1 + d + abs ((keysMap !! num) - (keysMap !! n1))):((n1, num), 1 + d + abs ((keys !! num) - (keys !! n2))):[]) pc
+                              $ map (\((n1, n2), d) -> ((num, n2), 1 + d + abs ((keysMap !! num) - (keysMap !! n1))):((n1, num), 1 + d + abs ((keysMap !! num) - (keysMap !! n2))):[]) pc
   
 
 main :: IO ()
