@@ -59,7 +59,7 @@ solve i firstCoord@(fx,fy) emptyCellPos
 
 -- format the list of tromino coordinates according to the required output.
 showTiles :: [[(Int,Int)]] -> String
-showTiles = unlines . map (unwords . map showCoord)
+showTiles = unlines . map (unwords . map showCoord . sort)
   where
     showCoord :: (Int,Int) -> String
     showCoord (x,y) = show x ++ " " ++ show y
@@ -69,4 +69,4 @@ main = interact $ \input ->
     let (nLine:xLine:_) = lines input
         n = read nLine
         [x, y] = map read (words xLine)
-    in showTiles $ map sort $ (solve (fromIntegral (2^n)) (1,1) (x,y))
+    in showTiles $ (solve (fromIntegral (2^n)) (1,1) (x,y))
